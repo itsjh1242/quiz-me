@@ -7,6 +7,7 @@ import MyQuiz from "./components/ui/my-quiz/page";
 import QuizDetail from "./components/ui/quiz-detail/page";
 import Quizzes from "./components/ui/quizzes/page";
 import ShareQuiz from "./components/ui/share/page";
+import QuizResult from "./components/ui/quiz-result/page";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/my-quiz/detail/:uuid" element={<QuizDetail />} />
         <Route path="/quizzes/:uuid" element={<Quizzes />} />
         <Route path="/share/:uuid" element={<ShareQuiz />} />
+        <Route path="/quizzes/result/:uuid/:user" element={<QuizResult />} />
       </Routes>
     </HashRouter>
   );

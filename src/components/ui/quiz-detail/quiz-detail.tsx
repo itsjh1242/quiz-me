@@ -52,6 +52,8 @@ const QuizDetailPage = () => {
     }
   }, [participant, selectedParticipant]);
 
+  console.log(selectedQuiz);
+
   if (!quiz || !selectedQuiz) return <div className="w-screen h-screen flex justify-center items-center">Loading...</div>;
   return (
     <div className="min-h-screen flex items-start justify-center py-12 max-sm:px-2">
@@ -87,39 +89,21 @@ const QuizDetailPage = () => {
                     Q{index + 1}. {selectedQuiz.quiz[item].question}
                   </p>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name={selectedQuiz.quiz[item].question}
-                        value={1}
-                        checked={(selectedQuiz.quiz[item].selectedAnswer || parseInt(selectedQuiz.quiz[item].correct)) === 1}
-                        disabled
-                        className="form-radio text-indigo-600"
-                      />
-                      <p className="text-base text-gray-700 max-sm:text-xs">{selectedQuiz.quiz[item].answer1}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name={selectedQuiz.quiz[item].question}
-                        value={2}
-                        checked={(selectedQuiz.quiz[item].selectedAnswer || parseInt(selectedQuiz.quiz[item].correct)) === 2}
-                        disabled
-                        className="form-radio text-indigo-600"
-                      />
-                      <p className="text-base text-gray-700 max-sm:text-xs">{selectedQuiz.quiz[item].answer2}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name={selectedQuiz.quiz[item].question}
-                        value={3}
-                        checked={(selectedQuiz.quiz[item].selectedAnswer || parseInt(selectedQuiz.quiz[item].correct)) === 3}
-                        disabled
-                        className="form-radio text-indigo-600"
-                      />
-                      <p className="text-base text-gray-700 max-sm:text-xs">{selectedQuiz.quiz[item].answer3}</p>
-                    </div>
+                    {Object.keys(selectedQuiz.quiz[item].answer).map((ans, index) => {
+                      return (
+                        <div key={index} className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name={item}
+                            value={1}
+                            checked={(selectedQuiz.quiz[item].selectedAnswer || parseInt(selectedQuiz.quiz[item].correct)) === index + 1}
+                            disabled
+                            className="form-radio text-indigo-600"
+                          />
+                          <p className="text-base text-gray-700 max-sm:text-xs">{selectedQuiz.quiz[item].answer[ans]}</p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               );

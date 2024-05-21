@@ -59,6 +59,22 @@ export const GetParticipantById = async (id: string) => {
   }
 };
 
+export const GetQuizResultByName = async (id: string, name: string) => {
+  try {
+    const docRef = doc(db, `participants/participantsCollection/${id}`, name);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log("No such document!");
+      return null;
+    }
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+};
+
 export const DisableQuizById = async (id: string) => {
   try {
     const docRef = doc(db, "quizzes", id);
@@ -111,7 +127,7 @@ export const Enroll = async ({ quiz, participantName }: { quiz: { [key: string]:
     // participantName이 이미 존재하는지 확인
     const participantDocRef = doc(db, `participants/participantsCollection/${quiz.id}/${participantName}`);
     const participantSnapshot = await getDoc(participantDocRef);
-    console.log(participantSnapshot);
+
     if (participantSnapshot.exists()) {
       // 이미 존재할 경우
       return { status: "already_exists", totalQuestion: 0, correctAnswer: 0 };
@@ -151,41 +167,5 @@ export const UploadQuiz = async ({
       console.error(e);
       return null;
     }
-  }
-};
-
-// 퀴즈 추가 입력 폼 초기화 함수
-export const InitQuizContext = ({
-  qRef,
-  a1Ref,
-  a2Ref,
-  a3Ref,
-  c1Ref,
-  c2Ref,
-  c3Ref,
-  quiz,
-  selectedQuiz,
-  isInit,
-}: {
-  qRef: React.RefObject<HTMLInputElement>;
-  a1Ref: React.RefObject<HTMLInputElement>;
-  a2Ref: React.RefObject<HTMLInputElement>;
-  a3Ref: React.RefObject<HTMLInputElement>;
-  c1Ref: React.RefObject<HTMLInputElement>;
-  c2Ref: React.RefObject<HTMLInputElement>;
-  c3Ref: React.RefObject<HTMLInputElement>;
-  quiz: { [key: string]: any };
-  selectedQuiz: string;
-  isInit: boolean;
-}) => {
-  const correct = quiz[selectedQuiz].correct.toString();
-  if (qRef.current && a1Ref.current && a2Ref.current && a3Ref.current && c1Ref.current && c2Ref.current && c3Ref.current) {
-    qRef.current.value = isInit ? "" : quiz[selectedQuiz].question;
-    a1Ref.current.value = isInit ? "" : quiz[selectedQuiz].answer1;
-    a2Ref.current.value = isInit ? "" : quiz[selectedQuiz].answer2;
-    a3Ref.current.value = isInit ? "" : quiz[selectedQuiz].answer3;
-    c1Ref.current.checked = isInit ? false : correct === "1";
-    c2Ref.current.checked = isInit ? false : correct === "2";
-    c3Ref.current.checked = isInit ? false : correct === "3";
   }
 };

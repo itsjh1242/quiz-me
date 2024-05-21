@@ -44,11 +44,11 @@ const MyQuizPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-12 max-sm:px-3">
       <h1 className="text-4xl font-bold mb-8">내 퀴즈</h1>
-      <div className="w-full max-w-md flex justify-center items-center">
+      <div className="w-full max-w-md h-full flex flex-col justify-center items-center">
         {quizzes.map((quiz: any) => (
           <div
             key={quiz.id}
-            className="bg-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center cursor-pointer hover:shadow-lg transition duration-300"
+            className="min-w-96 bg-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center cursor-pointer hover:shadow-lg transition duration-300"
             onClick={() => {
               handlerMoveToDetail(quiz);
             }}

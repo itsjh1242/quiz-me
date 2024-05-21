@@ -9,23 +9,24 @@ const INPUT_DEFAULT_SETTING = {
 
 interface InputInterface {
   className?: string;
-  prop_ref?: React.RefObject<HTMLInputElement>;
+  value?: string | null;
   label?: string;
   type?: string;
   placeholder?: string;
   focus_color?: string;
-  method?: ((event: React.ChangeEvent<HTMLInputElement>, target: string) => void) | (() => {});
-  AddQuizContextTarget: string;
+  method?: ((event: React.ChangeEvent<HTMLInputElement>, target: string, isAnswer?: boolean, answerIndex?: number) => void) | (() => {});
+  AddQuizContextTarget?: string;
+  isAnswer?: boolean;
+  answerIndex?: number;
 }
 
 export const Input = (props: InputInterface) => {
-  const { className, prop_ref, label, type, placeholder, focus_color, method, AddQuizContextTarget } = props;
+  const { className, value, type, placeholder, focus_color, method, AddQuizContextTarget, isAnswer, answerIndex } = props;
 
   return (
     <>
-      <label className="block text-gray-700 mb-2">{label === undefined ? INPUT_DEFAULT_SETTING.label : label}</label>
       <input
-        ref={prop_ref === undefined ? null : prop_ref}
+        value={value ?? ""}
         type={type === undefined ? INPUT_DEFAULT_SETTING.label : type}
         className={cn(
           `w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:${
@@ -36,7 +37,7 @@ export const Input = (props: InputInterface) => {
         placeholder={placeholder === undefined ? INPUT_DEFAULT_SETTING.placeholder : placeholder}
         onChange={(event) => {
           if (method) {
-            method(event, AddQuizContextTarget);
+            method(event, AddQuizContextTarget || "", isAnswer, answerIndex);
           }
         }}
       />

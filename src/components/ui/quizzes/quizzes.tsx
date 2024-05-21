@@ -27,7 +27,7 @@ const QuizPage = () => {
   const handleChoose = (key: any, selected: number) => {
     if (quiz) {
       quiz.quiz[key]["selectedAnswer"] = selected;
-      if (selected.toString() === quiz.quiz[key].correct) {
+      if (selected === quiz.quiz[key].correct) {
         quiz.quiz[key]["isCorrect"] = true;
       } else {
         quiz.quiz[key]["isCorrect"] = false;
@@ -54,7 +54,7 @@ const QuizPage = () => {
           await Enroll({ quiz, participantName }).then((res: { status: string; correctAnswer: number; totalQuestion: number }) => {
             if (res.status && res.status === "success") {
               alert(res.totalQuestion + "문제 중 " + res.correctAnswer + "문제를 맞혔어요.");
-              return navigate("/");
+              return navigate("/quizzes/result/" + uuid + "/" + participantName);
             } else if (res.status && res.status === "already_exists") {
               alert("입력하신 이름은 이미 누군가 사용했네요. 제작자가 알아볼 수 있는 다른 이름을 쓰는건 어때요?");
             } else {
@@ -89,42 +89,22 @@ const QuizPage = () => {
                 Q{index + 1}. {quiz.quiz[item].question}
               </p>
               <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name={quiz.quiz[item].question}
-                    value={1}
-                    onChange={() => {
-                      handleChoose(item, 1);
-                    }}
-                    className="form-radio text-indigo-600"
-                  />
-                  <p className="text-base text-gray-700 max-sm:text-xs">{quiz.quiz[item].answer1}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name={quiz.quiz[item].question}
-                    value={2}
-                    onChange={() => {
-                      handleChoose(item, 2);
-                    }}
-                    className="form-radio text-indigo-600"
-                  />
-                  <p className="text-base text-gray-700 max-sm:text-xs">{quiz.quiz[item].answer2}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name={quiz.quiz[item].question}
-                    value={3}
-                    onChange={() => {
-                      handleChoose(item, 3);
-                    }}
-                    className="form-radio text-indigo-600"
-                  />
-                  <p className="text-base text-gray-700 max-sm:text-xs">{quiz.quiz[item].answer3}</p>
-                </div>
+                {quiz.quiz[item].answer.map((ans: string, index: number) => {
+                  return (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name={quiz.quiz[item].question}
+                        value={index + 1}
+                        onChange={() => {
+                          handleChoose(item, index + 1);
+                        }}
+                        className="form-radio text-indigo-600"
+                      />
+                      <p className="text-base text-gray-700 max-sm:text-xs">{ans}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
