@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Quiz-Me",
+  "name": "퀴즈를 만들고 친구들에게 공유하자",
   "icons": [
     {
       "src": "favicon.ico",
