@@ -44,7 +44,7 @@ const MyQuizPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-12 max-sm:px-3">
       <h1 className="text-4xl font-bold mb-8">내 퀴즈</h1>
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md flex justify-center items-center">
         {quizzes.map((quiz: any) => (
           <div
             key={quiz.id}
