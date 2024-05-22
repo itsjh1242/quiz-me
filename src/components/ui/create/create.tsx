@@ -74,7 +74,7 @@ const CreateQuizPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-12 ">
       <h1 className="text-4xl font-bold mb-8">새로운 퀴즈 만들기</h1>
-      <div className="w-full sm:w-1/2 flex max-sm:flex-col justify-center items-start max-sm:items-center gap-4">
+      <div className="w-full sm:w-2/3 flex max-sm:flex-col justify-center items-start max-sm:items-center gap-4">
         {/* 퀴즈 추가 */}
         <AddQuizForm
           quiz={quiz}
@@ -90,7 +90,7 @@ const CreateQuizPage = () => {
           }}
         />
         {/* 퀴즈 목록 */}
-        <div className="bg-white p-8 rounded shadow-md w-full max-w-md max-sm:max-w-sm min-h-96">
+        <div className="bg-white p-8 rounded shadow-md w-full max-sm:max-w-sm min-h-96 min-w-sm max-w-sm">
           <h2 className="text-2xl font-bold mb-4">퀴즈 목록</h2>
           {Object.keys(quiz).map((key, index) => {
             return (
@@ -221,7 +221,7 @@ const AddQuizForm = ({
   }, [quiz, selectedQuiz]);
 
   return (
-    <div className="bg-white p-8 rounded shadow-md w-full max-sm:max-w-sm min-h-96">
+    <div className="bg-white p-8 rounded shadow-md w-full max-sm:max-w-sm min-h-96 min-w-sm max-w-sm">
       <h2 className="text-2xl font-bold mb-4">{isEditMode ? "퀴즈 수정" : "퀴즈 추가"}</h2>
       <div className="mb-4">
         <Input
