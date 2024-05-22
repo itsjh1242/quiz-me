@@ -7,6 +7,7 @@ import { GetQuizById, Enroll } from "../../lib/quiz";
 // ui
 import { Button } from "../Button";
 import { Badge } from "../Badge";
+import { Loading } from "../Alert";
 
 const QuizPage = () => {
   const { uuid } = useParams();
@@ -68,7 +69,7 @@ const QuizPage = () => {
     }
   };
 
-  if (!quiz) return <div className="w-screen h-screen flex justify-center items-center">Loading...</div>;
+  if (!quiz) return <Loading />;
   if (!quiz.available) return <div className="w-screen h-screen flex justify-center items-center">해당 퀴즈는 제작자에 의해 비활성화 되었습니다.</div>;
 
   return (

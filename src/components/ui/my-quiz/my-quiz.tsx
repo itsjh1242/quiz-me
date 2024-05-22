@@ -3,17 +3,14 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "../../lib/useAuth";
 
 import { GetQuizzesByUserName } from "../../lib/quiz";
-import { isLogin } from "../../../utils/firebase";
 
 // ui
 import { Badge } from "../Badge";
+import { Loading } from "../Alert";
 
 const MyQuizPage = () => {
   const user = useAuth();
   const navigate = useNavigate();
-  if (!isLogin()) {
-    navigate("/");
-  }
 
   const displayName = user?.displayName || "";
   const [quizzes, setQuizzes] = useState<{ [key: string]: any }>([]);
@@ -40,6 +37,8 @@ const MyQuizPage = () => {
   const handlerMoveToDetail = (quiz: any) => {
     navigate("/my-quiz/detail/" + quiz.id);
   };
+
+  if (!quizzes) return <Loading />;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-12 max-sm:px-3">

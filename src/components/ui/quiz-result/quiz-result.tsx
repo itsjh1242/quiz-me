@@ -7,6 +7,7 @@ import { GetQuizResultByName } from "../../lib/quiz";
 // ui
 import { Button } from "../Button";
 import { Badge } from "../Badge";
+import { Loading, WrongAccess } from "../Alert";
 
 const QuizResultPage = () => {
   const { uuid, user } = useParams();
@@ -24,8 +25,8 @@ const QuizResultPage = () => {
     fetchResult();
   }, [uuid, user]);
 
-  if (!uuid || !user) return <div>잘못된 접근입니다.</div>;
-  if (!result || result === null) return <div>로딩중...</div>;
+  if (!uuid || !user) return <WrongAccess />;
+  if (!result || result === null) return <Loading />;
   return (
     <div className="min-h-screen flex items-start justify-center py-12 max-sm:px-2">
       <div className="w-1/2 max-sm:w-full flex flex-col gap-2">
@@ -73,7 +74,7 @@ const QuizResultPage = () => {
                             : ""
                         }`}
                       >
-                        {ans}{" "}
+                        {ans}
                         {result.quiz.quiz[item].correct === index + 1 ? "(정답)" : result.quiz.quiz[item].selectedAnswer === index + 1 ? "(내가 고른 답)" : ""}
                       </p>
                     </div>

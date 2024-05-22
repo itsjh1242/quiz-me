@@ -5,7 +5,6 @@ import { useBeforeunload } from "react-beforeunload";
 
 // lib
 import { UploadQuiz } from "../../lib/quiz";
-import { isLogin } from "../../../utils/firebase";
 
 // ui
 import { Button } from "../Button";
@@ -19,9 +18,6 @@ const CreateQuizPage = () => {
 
   const user = useAuth();
   const navigate = useNavigate();
-  if (!isLogin()) {
-    navigate("/");
-  }
 
   const [quiz, setQuiz] = useState<{ [key: string]: any }>({});
   const [quizCount, setQuizCount] = useState<number>(0);
@@ -62,10 +58,10 @@ const CreateQuizPage = () => {
     try {
       if (Object.keys(quiz).length >= 1) {
         const res = await UploadQuiz({ quiz, user });
-        if (res !== null || res !== undefined) {
+        if (res !== null && res !== undefined) {
           return navigate("/share/" + res);
         } else {
-          return alert("Error.");
+          return alert("퀴즈 제목은 입력해야합니다.");
         }
       } else {
         alert("퀴즈는 최소 1개 이상 만들어야 합니다.");

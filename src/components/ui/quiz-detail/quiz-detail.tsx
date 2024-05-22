@@ -4,23 +4,21 @@ import { useNavigate, useParams } from "react-router-dom";
 // lib
 import { GetQuizById, GetParticipantById, DisableQuizById } from "../../lib/quiz";
 import { CopyClipBoard } from "../../../utils/default";
-import { isLogin } from "../../../utils/firebase";
 
 // ui
 import { Badge } from "../Badge";
 import { Button } from "../Button";
+import { Loading } from "../Alert";
 
 const QuizDetailPage = () => {
   const { uuid } = useParams();
   const navigate = useNavigate();
-  if (!isLogin()) {
-    navigate("/");
-  }
 
   const [quiz, setQuiz] = useState<{ [key: string]: any } | null>(null);
   const [participant, setParticipant] = useState<{ [key: string]: any } | null>(null);
   const [selectedQuiz, SetSelectedQuiz] = useState<{ [key: string]: any } | null>(null);
-  const [selectedParticipant, setSelectedParticipant] = useState("");
+  const [selectedParticipant, setSelectedParticipant] = useState<string>("default");
+  const [selectedParticipantResult, setSelectedParticipantResult] = useState<{ [key: string]: any } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,15 +44,14 @@ const QuizDetailPage = () => {
   };
 
   useEffect(() => {
-    if (participant && selectedParticipant !== "") {
+    if (participant && selectedParticipant !== "default") {
       const filteredParticipants = participant.filter((participant: { participantName: string }) => participant.participantName === selectedParticipant);
+      setSelectedParticipantResult(filteredParticipants[0].result);
       SetSelectedQuiz(filteredParticipants[0].quiz);
     }
   }, [participant, selectedParticipant]);
 
-  console.log(selectedQuiz);
-
-  if (!quiz || !selectedQuiz) return <div className="w-screen h-screen flex justify-center items-center">Loading...</div>;
+  if (!quiz || !selectedQuiz) return <Loading />;
   return (
     <div className="min-h-screen flex items-start justify-center py-12 max-sm:px-2">
       <div className="w-1/2 max-sm:w-full flex flex-col">
@@ -80,7 +77,17 @@ const QuizDetailPage = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3 my-3">
-          <p className="text-2xl max-sm:text-base">{selectedParticipant !== "" ? selectedParticipant + "님의 답안" : "퀴즈 답안"}</p>
+          <div className="flex flex-col">
+            <p className="text-2xl max-sm:text-base">{selectedParticipant !== "default" ? selectedParticipant + "님의 답안" : "퀴즈 답안"}</p>
+            {selectedParticipant !== "default" && selectedParticipantResult ? (
+              <Badge className="w-fit">
+                <p>{Math.floor((selectedParticipantResult.correctAnswer / selectedParticipantResult.totalQuestion) * 100)}점</p>
+              </Badge>
+            ) : (
+              <p className="text-gray-600 text-sm">퀴즈의 정답이 표시됩니다</p>
+            )}
+          </div>
+
           <div className="space-y-4">
             {Object.keys(selectedQuiz.quiz).map((item, index) => {
               return (
@@ -100,7 +107,16 @@ const QuizDetailPage = () => {
                             disabled
                             className="form-radio text-indigo-600"
                           />
-                          <p className="text-base text-gray-700 max-sm:text-xs">{selectedQuiz.quiz[item].answer[ans]}</p>
+                          <div className={`flex gap-1 text-base text-gray-700 max-sm:text-xs`}>
+                            {selectedQuiz.quiz[item].answer[ans]}
+                            {selectedQuiz.quiz[item].correct === index + 1 ? (
+                              <p className="font-bold text-green-600"> (정답)</p>
+                            ) : selectedQuiz.quiz[item].selectedAnswer === index + 1 ? (
+                              <p className="font-bold text-red-600">({selectedParticipant}님이 고른 답)</p>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
                       );
                     })}
@@ -111,7 +127,11 @@ const QuizDetailPage = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3 my-3">
-          <p className="text-2xl max-sm:text-base">퀴즈 참가자</p>
+          <div className="flex flex-col">
+            <p className="text-2xl max-sm:text-base">퀴즈 참가자</p>
+            <p className="text-gray-600 text-sm max-sm:text-xs">이름을 선택하면 참가자가 작성한 답안이 표시됩니다.</p>
+          </div>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {participant && Object.keys(participant).length > 0 ? (
               Object.keys(participant).map((key, index) => (

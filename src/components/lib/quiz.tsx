@@ -167,5 +167,7 @@ export const UploadQuiz = async ({
       console.error(e);
       return null;
     }
+  } else {
+    return null;
   }
 };

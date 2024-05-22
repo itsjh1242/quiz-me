@@ -1,18 +1,6 @@
 import { auth, provider } from "./firebase_config";
 import { signInWithPopup } from "firebase/auth";
 
-export function isLogin() {
-  try {
-    if (auth.currentUser) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 export async function signInWithGoogle() {
   try {
     await signInWithPopup(auth, provider);
